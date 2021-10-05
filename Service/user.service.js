@@ -8,17 +8,17 @@ service = {
   async registerUser(req, res) {
     try {
       // req body validation Joi;
-      const { error, value } = await registerSchema.validate(req.body);
-      console.log(error.details);
-      if (error)
-        return res
-          .status(400)
-          .send({
-            error: "validation failed",
-            message: error.details[0].message,
-          });
+      let { error, value } = await registerSchema.validate(req.body);
+      console.log(error);
+      console.log(value); //in value have all  reg user details
 
-      const newUser = await db.users.findOne({ email: req.body.email });
+      if (error)
+        return res.status(400).send({
+          error: "validation failed",
+          message: error.details[0].message,
+        });
+
+      const newUser = await db.users.findOne({ email: value.email });
       // console.log(data);
       if (newUser) {
         return res.status(400).send({ error: "user Exist already" });
@@ -29,11 +29,11 @@ service = {
 
       // hash (two params : our pass , random string )
 
-      req.body.password = await bcrypt.hash(req.body.password, salt); // it will stored in db;
+      value.password = await bcrypt.hash(value.password, salt); // it will stored in db;
 
       // else insert the user to db;
 
-      await db.users.insertOne(req.body);
+      await db.users.insertOne(value);
       console.log("User registerd");
 
       res.send("registerd");
@@ -47,22 +47,22 @@ service = {
   async loginUser(req, res) {
     try {
       //req body validation using Joi
-      const { error, value } = await loginSchema.validate(req.body);
+      let { error, value } = await loginSchema.validate(req.body);
       // console.log(validation); // gives two  : value and err;
-      console.log(error);
+      // console.log(error);
       if (error)
         return res.status(400).send({
           error: "validation failed",
           message: error.details[0].message,
         });
 
-      const user = await db.users.findOne({ email: req.body.email });
+      const user = await db.users.findOne({ email: value.email });
       if (!user) {
         res.status(400).send("Users doesn't exist");
       }
 
       // compare (our pass, and hash) check password is same or not
-      const isValid = await bcrypt.compare(req.body.password, user.password);
+      const isValid = await bcrypt.compare(value.password, user.password);
       if (!isValid) {
         return res
           .status(403)
