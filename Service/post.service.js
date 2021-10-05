@@ -1,5 +1,7 @@
 const { ObjectId } = require("mongodb"); //driver
 
+const { postSchema } = require("../Schema");
+
 const db = require("../mongo"); // mongo db connection
 
 service = {
@@ -20,8 +22,17 @@ service = {
   async postData(req, res) {
     console.log(req.user);
     try {
+      //validate the body:
+      const { error, value } = await postSchema.validate(req.body);
+      if (error)
+        return res.status(400).send({
+          error: "validation error",
+          message: error.details[0].message,
+        });
+
+      //insert post along with logged user details;
       const { insertedId: _id } = await db.posts.insertOne({
-        ...req.body,
+        ...value,
         userId: req.user.userId,
       });
 
@@ -57,6 +68,14 @@ service = {
   },
   async updateData(req, res) {
     try {
+      //validate the body:
+      const { error, value } = await postSchema.validate(req.body);
+      if (error)
+        return res.status(400).send({
+          error: "validation error",
+          message: error.details[0].message,
+        });
+
       //check userID and _id is same:
 
       const post = await db.posts.findOne({
@@ -72,8 +91,8 @@ service = {
       console.log("Updated id is :", req.params.id);
       await db.posts.findOneAndUpdate(
         { _id: ObjectId(req.params.id) },
-        { $set: { ...req.body } },
-        { ReturnDocument: "after" }
+        { $set: { ...value } },
+        { returnDocument: "after" }
       );
       // console.log(data);
       res.send({ ...req.body, id: req.params.id });

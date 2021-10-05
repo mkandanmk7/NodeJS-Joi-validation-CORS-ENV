@@ -72,7 +72,8 @@ service = {
       // jwt sign(two param : {json: unique id}, "password");
       const authToken = jwt.sign(
         { userId: user._id, email: user.email },
-        "muthu@123"
+        "muthu@123",
+        { expiresIn: "8h" }
       ); // generates tokens for parti- user accessing api;
 
       res.send({ Token: authToken });
