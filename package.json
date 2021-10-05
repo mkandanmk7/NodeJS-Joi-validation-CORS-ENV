@@ -1,0 +1,20 @@
+{
+  "name": "joi_cors_env_dep",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node Express.js",
+    "devStart": "nodemon Express.js"
+  },
+  "author": "Muthu Backend",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^4.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13"
+  }
+}
