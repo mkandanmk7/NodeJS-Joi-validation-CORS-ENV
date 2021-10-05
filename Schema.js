@@ -1,5 +1,4 @@
 const Joi = require("joi");
- 
 
 // schema structure; predefind;
 const schema = {
@@ -8,12 +7,10 @@ const schema = {
     email: Joi.string().email().required(),
     password: Joi.string().min(4).max(12).required(),
   }),
-  loginSchema: Joi.object(
-      {
-          email:Joi.string().email().required(),
-          password:Joi.string().min(4).max(12).required();
-      }
-  )
+  loginSchema: Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().min(4).max(12).required(),
+  }),
 };
 
-module.exports=schema;
+module.exports = schema;

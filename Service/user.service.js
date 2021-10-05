@@ -8,7 +8,15 @@ service = {
   async registerUser(req, res) {
     try {
       // req body validation Joi;
-      const validation = await registerSchema.validate(req.body);
+      const { error, value } = await registerSchema.validate(req.body);
+      console.log(error.details);
+      if (error)
+        return res
+          .status(400)
+          .send({
+            error: "validation failed",
+            message: error.details[0].message,
+          });
 
       const newUser = await db.users.findOne({ email: req.body.email });
       // console.log(data);
@@ -39,7 +47,14 @@ service = {
   async loginUser(req, res) {
     try {
       //req body validation using Joi
-      const validation = await registerSchema.validate(req.body);
+      const { error, value } = await loginSchema.validate(req.body);
+      // console.log(validation); // gives two  : value and err;
+      console.log(error);
+      if (error)
+        return res.status(400).send({
+          error: "validation failed",
+          message: error.details[0].message,
+        });
 
       const user = await db.users.findOne({ email: req.body.email });
       if (!user) {
