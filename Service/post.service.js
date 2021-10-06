@@ -20,7 +20,7 @@ service = {
     }
   },
   async postData(req, res) {
-    console.log(req.user);
+    // console.log(req.user); //gives users  data userId,email,exp,iat;
     try {
       //validate the body:
       const { error, value } = await postSchema.validate(req.body);
