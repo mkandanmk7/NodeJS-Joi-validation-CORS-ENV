@@ -2,7 +2,7 @@ const { ObjectId } = require("mongodb"); //driver
 
 const { postSchema } = require("../Schema");
 
-const db = require("../mongo"); // mongo db connection
+const db = require("../shared/mongo"); // mongo db connection
 
 service = {
   async getData(req, res) {

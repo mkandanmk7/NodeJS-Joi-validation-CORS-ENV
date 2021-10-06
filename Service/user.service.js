@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongodb"); //driver
 const bcrypt = require("bcrypt");
 const { registerSchema, loginSchema } = require("../Schema");
-const db = require("../mongo"); // mongo db connection
+const db = require("../shared/mongo"); // mongo db connection
 const jwt = require("jsonwebtoken");
 
 service = {

@@ -1,5 +1,7 @@
+const cors = require("cors");
+require("dotenv").config();
 const express = require("express");
-const mongo = require("./mongo");
+const mongo = require("./shared/mongo");
 const { authMiddle, loginMiddle } = require("./shared/middleware");
 
 const postData = require("./Router/Post");
@@ -9,7 +11,7 @@ const server = express();
 
 // port number
 
-const port = "3001";
+// const PORT = "3001";
 
 //wrapping to async () with IIFE
 
@@ -17,6 +19,9 @@ const port = "3001";
   try {
     // mongoDB connect
     await mongo.connectDB();
+
+    //cors  allowing to use api everyone
+    server.use(cors()); // for specific cors({origin:["netlify.com"]})
 
     // parse req body string to json format
 
@@ -38,8 +43,8 @@ const port = "3001";
 
     //start the server;
 
-    server.listen(port, () => {
-      console.log(`server Started at ${port}`);
+    server.listen(process.env.PORT, () => {
+      console.log(`server Started at ${process.env.PORT}`);
     });
   } catch (err) {
     console.log("Err here", err);
