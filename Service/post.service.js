@@ -1,6 +1,6 @@
 const { ObjectId } = require("mongodb"); //driver
 
-const { postSchema } = require("../Schema");
+const { postSchema } = require("../shared/Schema");
 
 const db = require("../shared/mongo"); // mongo db connection
 
